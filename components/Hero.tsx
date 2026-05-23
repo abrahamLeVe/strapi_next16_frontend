@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { BASE_URL } from "@/lib/strapi";
 
 interface HeroProps {
   data: {
@@ -21,7 +20,7 @@ interface HeroProps {
 
 export function Hero({ data }: HeroProps) {
   const { heading, subHeading, image, link } = data;
-  const imageUrl = `${BASE_URL}${image.url}`;
+  const imageUrl = `${image.url}`;
 
   return (
     <section className="relative w-full min-h-[70vh] flex items-center justify-center overflow-hidden py-20">
