@@ -1,7 +1,8 @@
 import { cacheLife } from "next/cache";
 import qs from "qs";
 
-export const BASE_URL = process.env.STRAPI_BASE_URL || "http://localhost:1337";
+export const BASE_URL =
+  process.env.STRAPI_BASE_URL || "https://secure-desk-ba9bf7e12c.strapiapp.com";
 
 // Esta es la traducción exacta de tu URL a objeto JS
 const QUERY_HOME_PAGE = {
