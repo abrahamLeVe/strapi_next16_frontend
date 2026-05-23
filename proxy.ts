@@ -28,7 +28,6 @@ export async function proxy(request: NextRequest) {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
-      next: { revalidate: 300 }, // ¡CLAVE! Cachea la validación por 5 minutos para no saturar a Strapi
     });
 
     if (!response.ok) {
