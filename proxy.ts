@@ -1,9 +1,10 @@
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
+import { BASE_URL } from "./lib/strapi";
 
 const protectedRoutes = new Set(["/dashboard", "/profile", "/settings"]);
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const currentPath = request.nextUrl.pathname;
 
   const isProtectedRoute = Array.from(protectedRoutes).some(
@@ -21,18 +22,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 2. SOLUCIÓN: Lee la constante directamente aquí usando la nueva URL de producción
-  const MIDDLEWARE_BASE_URL =
-    process.env.STRAPI_BASE_URL ||
-    "https://secure-desk-ba9bf7e12c.strapiapp.com";
-
   try {
-    const response = await fetch(`${MIDDLEWARE_BASE_URL}/api/users/me`, {
+    const response = await fetch(`${BASE_URL}/api/users/me`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
-      next: { revalidate: 300 },
+      next: { revalidate: 300 }, // ¡CLAVE! Cachea la validación por 5 minutos para no saturar a Strapi
     });
 
     if (!response.ok) {
@@ -53,5 +49,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/((?!api|_next/static|_next/image|favicon.ico|placeholder.svg).*)",
+    "/dashboard",
+    "/dashboard/:path*",
   ],
 };
